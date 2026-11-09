@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aprender Python grátis: curso do zero com exercícios</title>
+<meta name="description" content="Aprenda Python do zero, grátis e em português. 31 lições curtas com exercícios práticos: variáveis, funções, classes, APIs, pandas, Flask e FastAPI.">
+<meta name="keywords" content="aprender python, curso de python grátis, python para iniciantes, python do zero, exercícios de python">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#eef2f5;--panel:#fff;--ink:#1b2733;--mute:#5d6b78;--line:#d3dce4;--blue:#2f6db5;--blue-ink:#fff;--gold:#f2c230;--ok:#1f7a4d;--bad:#b3392f;--term:#14202b;--term-ink:#d8e6f2;--term-mute:#7f93a6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1820;--panel:#17232d;--ink:#e6eef5;--mute:#93a5b5;--line:#2a3a47;--blue:#6ea6ea;--blue-ink:#0f1820;--ok:#5cc690;--bad:#f08a80;--term:#0a1118}}
+:root[data-theme="dark"]{--bg:#0f1820;--panel:#17232d;--ink:#e6eef5;--mute:#93a5b5;--line:#2a3a47;--blue:#6ea6ea;--blue-ink:#0f1820;--ok:#5cc690;--bad:#f08a80;--term:#0a1118}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Sans 3",system-ui,sans-serif}
+header{padding:20px 16px 8px;max-width:1000px;margin:0 auto}
+h1{font:700 30px/1.1 "Space Grotesk",system-ui,sans-serif;margin:0 0 6px}
+h1 span{background:var(--gold);color:#1b2733;padding:0 8px;border-radius:4px}
+header p{margin:0 0 12px;color:var(--mute)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .4s}
+#count{font-size:14px;color:var(--mute);margin-top:4px}
+.wrap{max-width:1000px;margin:0 auto;padding:8px 16px 40px;display:grid;gap:16px;grid-template-columns:1fr}
+nav{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+nav button{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 12px;font:600 15px "Source Sans 3",sans-serif;cursor:pointer;text-align:left}
+nav button[aria-current="true"]{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+nav button.done::before{content:"✓ ";color:var(--ok)}
+main{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 18px}
+h2{font:700 25px/1.2 "Space Grotesk",system-ui,sans-serif;margin:0 0 10px}
+h3{font:700 17px "Space Grotesk",system-ui,sans-serif;margin:22px 0 6px}
+code{font:400 .92em "JetBrains Mono",ui-monospace,monospace;background:var(--bg);padding:1px 5px;border-radius:4px}
+pre,textarea,.out{font:400 14.5px/1.55 "JetBrains Mono",ui-monospace,monospace;margin:0}
+pre{background:var(--term);color:var(--term-ink);padding:14px;border-radius:8px;overflow-x:auto}
+.task{border-left:4px solid var(--gold);padding:2px 0 2px 12px;margin:8px 0 12px}
+textarea{width:100%;min-height:130px;background:var(--term);color:var(--term-ink);border:2px solid transparent;border-radius:8px;padding:14px;resize:vertical;tab-size:4}
+textarea:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.row button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:9px 14px;font:600 15px "Source Sans 3",sans-serif;cursor:pointer}
+.row button.go{background:var(--blue);color:var(--blue-ink);border-color:var(--blue)}
+.msg{min-height:1.5em;font-weight:600}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.out{background:var(--term);color:var(--term-mute);padding:10px 14px;border-radius:8px;white-space:pre-wrap;display:none}
+.out b{color:var(--term-ink);font-weight:600}
+.pager{display:flex;justify-content:space-between;margin-top:18px}
+.cards{display:grid;gap:10px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:2px;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card:hover{border-color:var(--blue)}.card:focus-visible{outline:3px solid var(--blue)}
+.card span{color:var(--mute);font-size:15px}
+main ul{padding-left:20px;margin:6px 0}
+main label{display:block;margin:12px 0 0;font-weight:600}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 2px;color:var(--mute)}
+main input{width:100%;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-top:4px}
+@media (min-width:760px){
+ .wrap{grid-template-columns:210px 1fr;align-items:start}
+ nav{flex-direction:column;overflow-y:auto;position:sticky;top:12px;max-height:calc(100vh - 24px)}
+ main{padding:28px}
+}
+nav button:hover,.row button:hover,.row a:hover{border-color:var(--blue)}
+.row a{border:1px solid var(--line);border-radius:8px;padding:9px 14px;font:600 15px "Source Sans 3",sans-serif;color:var(--ink);text-decoration:none}
+main{animation:up .35s ease}@keyframes up{from{opacity:0;transform:translateY(8px)}}
+header{background:linear-gradient(135deg,rgba(47,109,181,.14),transparent 60%);border-radius:0 0 16px 16px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}main{animation:none}}
+</style>
+</head>
+<body>
+<header>
+ <h1>Python <span>do zero</span></h1>
+ <p>Da primeira linha de código até APIs, dados e projetos. Leia, escreva e confira.</p>
+ <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="fill"></i></div>
+ <div id="count"></div>
+</header>
+<div class="wrap">
+ <nav id="nav" aria-label="Lições"></nav>
+ <main id="main"></main>
+</div>
+<script>
+const L=[
+{t:"Olá, mundo",b:`<p>Todo programa começa mostrando algo na tela. Em Python, isso é feito com <code>print()</code>. O texto vai entre aspas.</p>`,
+ ex:`print("Python é divertido")`,
+ task:"Escreva um programa que mostre exatamente: Olá, Python!",
+ start:"# escreva aqui\n",out:"Olá, Python!",
+ ck:[/print\s*\(\s*(["'])Olá, Python!\1\s*\)/],
+ hint:"Use print(\"...\") com o texto exato, incluindo vírgula e exclamação.",
+ sol:`print("Olá, Python!")`},
+{t:"Variáveis",b:`<p>Uma variável guarda um valor com um nome. Você cria com <code>=</code> e usa o nome depois. Os nomes não levam espaços nem acentos, por convenção.</p>`,
+ ex:`nome = "Ana"\nidade = 20\nprint(nome)\nprint(idade)`,
+ task:"Crie uma variável cidade com o nome de uma cidade (texto) e mostre o valor dela com print.",
+ start:"",out:"(o nome da cidade que você escolheu)",
+ ck:[/cidade\s*=\s*(["'])[^"'\n]+\1/,/print\s*\(\s*cidade\s*\)/],
+ hint:"Primeiro: cidade = \"Recife\". Depois: print(cidade).",
+ sol:`cidade = "Recife"\nprint(cidade)`},
+{t:"Números e contas",b:`<p>Python faz contas com <code>+</code> <code>-</code> <code>*</code> <code>/</code>. Use <code>**</code> para potência e <code>%</code> para o resto da divisão. Você pode guardar o resultado em uma variável.</p>`,
+ ex:`a = 7\nb = 2\nprint(a + b)   # 9\nprint(a / b)   # 3.5\nprint(a % b)   # 1`,
+ task:"Crie base = 5 e altura = 3. Calcule a área (base vezes altura) na variável area e mostre.",
+ start:"",out:"15",
+ ck:[/base\s*=\s*5/,/altura\s*=\s*3/,/area\s*=\s*(base\s*\*\s*altura|altura\s*\*\s*base)/,/print\s*\(\s*area\s*\)/],
+ hint:"area = base * altura, e depois print(area).",
+ sol:`base = 5\naltura = 3\narea = base * altura\nprint(area)`},
+{t:"Decisões com if",b:`<p>O <code>if</code> executa um bloco só quando a condição é verdadeira. O <code>else</code> cobre o caso contrário. Os dois pontos <code>:</code> e a indentação (4 espaços) são obrigatórios.</p>`,
+ ex:`nota = 7\nif nota >= 6:\n    print("Aprovado")\nelse:\n    print("Reprovado")`,
+ task:"Com idade = 18, mostre \"Maior de idade\" se idade >= 18. Caso contrário, mostre \"Menor de idade\".",
+ start:"idade = 18\n",out:"Maior de idade",
+ ck:[/idade\s*=\s*18/,/if\s+idade\s*>=\s*18\s*:/,/else\s*:/,/print\s*\(\s*(["'])Maior de idade\1\s*\)/,/print\s*\(\s*(["'])Menor de idade\1\s*\)/],
+ hint:"Estrutura: if idade >= 18: (4 espaços) print(...) e depois else: com outro print.",
+ sol:`idade = 18\nif idade >= 18:\n    print("Maior de idade")\nelse:\n    print("Menor de idade")`},
+{t:"Listas e repetição",b:`<p>Uma lista guarda vários valores entre colchetes. O <code>for</code> percorre a lista e repete um bloco para cada item. Os itens começam no índice 0: <code>frutas[0]</code> é o primeiro.</p>`,
+ ex:`cores = ["azul", "verde"]\nfor cor in cores:\n    print(cor)`,
+ task:"Crie a lista frutas com \"maçã\", \"banana\" e \"uva\". Use for para mostrar cada fruta.",
+ start:"",out:"maçã\nbanana\nuva",
+ ck:[/frutas\s*=\s*\[[^\]]*["']maçã["'][^\]]*["']banana["'][^\]]*["']uva["'][^\]]*\]/,/for\s+\w+\s+in\s+frutas\s*:/,/print\s*\(/],
+ hint:"frutas = [\"maçã\", \"banana\", \"uva\"] e depois for fruta in frutas: com print(fruta) indentado.",
+ sol:`frutas = ["maçã", "banana", "uva"]\nfor fruta in frutas:\n    print(fruta)`},
+{t:"Funções",b:`<p>Uma função é um bloco de código com nome, que você define com <code>def</code> e reutiliza quando quiser. Ela recebe valores (parâmetros) e devolve um resultado com <code>return</code>.</p>`,
+ ex:`def somar(a, b):\n    return a + b\n\nprint(somar(2, 3))  # 5`,
+ task:"Crie a função dobro(n) que devolve n * 2. Mostre o resultado de dobro(4).",
+ start:"",out:"8",
+ ck:[/def\s+dobro\s*\(\s*\w+\s*\)\s*:/,/return\s+(\w+\s*\*\s*2|2\s*\*\s*\w+|\w+\s*\+\s*\w+)/,/print\s*\(\s*dobro\s*\(\s*4\s*\)\s*\)/],
+ hint:"def dobro(n): com return n * 2 indentado, e depois print(dobro(4)).",
+ sol:`def dobro(n):\n    return n * 2\n\nprint(dobro(4))`},
+{t:"Textos (strings)",b:`<p>Textos têm métodos úteis: <code>.upper()</code>, <code>.lower()</code>, <code>.replace()</code>, <code>.split()</code> e <code>len()</code> para o tamanho. Com f-strings (<code>f"..."</code>) você coloca variáveis dentro do texto usando chaves.</p>`,
+ ex:`nome = "ana"\nprint(nome.upper())\nprint(len(nome))\nprint(f"Olá, {nome}!")`,
+ task:"Crie nome = \"Maria\" e mostre Olá, Maria! usando uma f-string.",start:"",out:"Olá, Maria!",
+ ck:[/nome\s*=\s*(["'])Maria\1/,/print\s*\(\s*f(["'])Olá, \{nome\}!\1\s*\)/],
+ hint:"print(f\"Olá, {nome}!\") — não esqueça o f antes das aspas.",
+ sol:`nome = "Maria"\nprint(f"Olá, {nome}!")`},
+{t:"Entrada e conversão",b:`<p><code>input()</code> lê o que a pessoa digita e sempre devolve texto. Converta com <code>int()</code>, <code>float()</code> ou <code>str()</code> quando precisar de número.</p>`,
+ ex:`idade = int(input("Idade: "))\nprint(idade + 1)`,
+ task:"Peça o nome com input(\"Seu nome: \") guardando em nome e mostre Oi, seguido do nome, usando f-string.",start:"",out:"Oi, (nome digitado)",
+ ck:[/nome\s*=\s*input\s*\(/,/print\s*\(\s*f(["'])[^"']*\{nome\}/],
+ hint:"nome = input(\"Seu nome: \") e depois print(f\"Oi, {nome}\").",
+ sol:`nome = input("Seu nome: ")\nprint(f"Oi, {nome}")`},
+{t:"Repetição: for e while",b:`<p><code>range(inicio, fim)</code> gera números do início até antes do fim. O <code>while</code> repete enquanto a condição for verdadeira. Use <code>break</code> para sair do laço e <code>continue</code> para pular para a próxima volta.</p>`,
+ ex:`for i in range(3):\n    print(i)   # 0, 1, 2\n\nn = 3\nwhile n > 0:\n    print(n)\n    n = n - 1`,
+ task:"Use for com range para mostrar os números de 1 a 5, um por linha.",start:"",out:"1\n2\n3\n4\n5",
+ ck:[/for\s+\w+\s+in\s+range\s*\(\s*1\s*,\s*6\s*\)\s*:/,/print\s*\(/],
+ hint:"range(1, 6) vai de 1 até 5, pois o fim não entra.",
+ sol:`for i in range(1, 6):\n    print(i)`},
+{t:"Listas: métodos e fatias",b:`<p>Métodos comuns: <code>.append(x)</code> adiciona, <code>.remove(x)</code> tira, <code>.sort()</code> ordena, <code>.pop()</code> remove o último. Fatias pegam um pedaço: <code>lista[1:3]</code> traz os itens 1 e 2. <code>lista[-1]</code> é o último.</p>`,
+ ex:`n = [3, 1, 2]\nn.append(4)\nn.sort()\nprint(n)       # [1, 2, 3, 4]\nprint(n[1:3])  # [2, 3]`,
+ task:"Crie numeros = [5, 2, 9], adicione o 1 com append, ordene com sort e mostre a lista.",start:"",out:"[1, 2, 5, 9]",
+ ck:[/numeros\s*=\s*\[\s*5\s*,\s*2\s*,\s*9\s*\]/,/numeros\.append\s*\(\s*1\s*\)/,/numeros\.sort\s*\(\s*\)/,/print\s*\(\s*numeros\s*\)/],
+ hint:"Use numeros.append(1), depois numeros.sort(), depois print(numeros).",
+ sol:`numeros = [5, 2, 9]\nnumeros.append(1)\nnumeros.sort()\nprint(numeros)`},
+{t:"Dicionários",b:`<p>Um dicionário guarda pares chave: valor. Você acessa pela chave, em vez de pela posição. Use <code>.items()</code> para percorrer chave e valor, e <code>.get(chave)</code> para evitar erro quando a chave não existe.</p>`,
+ ex:`p = {"nome": "Ana", "idade": 20}\np["cidade"] = "Recife"\nfor k, v in p.items():\n    print(k, v)`,
+ task:"Crie o dicionário aluno com nome \"Leo\" e nota 8. Mostre a nota.",start:"",out:"8",
+ ck:[/aluno\s*=\s*\{/,/(["'])nome\1\s*:\s*(["'])Leo\2/,/(["'])nota\1\s*:\s*8/,/print\s*\(\s*aluno\s*\[\s*(["'])nota\1\s*\]\s*\)/],
+ hint:"aluno = {\"nome\": \"Leo\", \"nota\": 8} e print(aluno[\"nota\"]).",
+ sol:`aluno = {"nome": "Leo", "nota": 8}\nprint(aluno["nota"])`},
+{t:"Tuplas e conjuntos",b:`<p>Uma tupla <code>(1, 2)</code> é como uma lista que não muda. Um conjunto <code>{1, 2, 3}</code> não aceita repetidos, e <code>set(lista)</code> remove duplicatas. Desempacotar: <code>x, y = (3, 4)</code>.</p>`,
+ ex:`pt = (3, 4)\nx, y = pt\nprint(set([1, 2, 2, 3]))  # {1, 2, 3}`,
+ task:"Com nums = [1, 2, 2, 3, 3, 3], crie unicos usando set e mostre quantos itens ele tem com len.",start:"nums = [1, 2, 2, 3, 3, 3]\n",out:"3",
+ ck:[/unicos\s*=\s*set\s*\(\s*nums\s*\)/,/print\s*\(\s*len\s*\(\s*unicos\s*\)\s*\)/],
+ hint:"unicos = set(nums) e print(len(unicos)).",
+ sol:`nums = [1, 2, 2, 3, 3, 3]\nunicos = set(nums)\nprint(len(unicos))`},
+{t:"Funções: mais recursos",b:`<p>Parâmetros podem ter valor padrão (<code>exp=2</code>), usado quando você não passa o argumento. Também dá para chamar com nome (<code>f(exp=3)</code>) e devolver vários valores: <code>return a, b</code>. Variáveis criadas dentro da função só existem nela.</p>`,
+ ex:`def oi(nome, msg="Olá"):\n    return f"{msg}, {nome}"\n\nprint(oi("Ana"))\nprint(oi("Ana", "Tchau"))`,
+ task:"Crie potencia(base, exp=2) que devolve base ** exp. Mostre potencia(5).",start:"",out:"25",
+ ck:[/def\s+potencia\s*\(\s*base\s*,\s*exp\s*=\s*2\s*\)\s*:/,/return\s+base\s*\*\*\s*exp/,/print\s*\(\s*potencia\s*\(\s*5\s*\)\s*\)/],
+ hint:"def potencia(base, exp=2): return base ** exp.",
+ sol:`def potencia(base, exp=2):\n    return base ** exp\n\nprint(potencia(5))`},
+{t:"Comprehensions e lambda",b:`<p>List comprehension cria uma lista em uma linha: <code>[expressão for item in sequência]</code>, com <code>if</code> opcional no fim para filtrar. <code>lambda</code> é uma função curta sem nome, útil em <code>sorted(lista, key=...)</code>.</p>`,
+ ex:`pares = [n for n in range(10) if n % 2 == 0]\nprint(pares)\nprint(sorted(["bb", "a", "ccc"], key=lambda s: len(s)))`,
+ task:"Crie quadrados com os quadrados de 1 a 5 usando comprehension e mostre a lista.",start:"",out:"[1, 4, 9, 16, 25]",
+ ck:[/quadrados\s*=\s*\[[^\]]+\s+for\s+\w+\s+in\s+range\s*\(\s*1\s*,\s*6\s*\)\s*\]/,/print\s*\(\s*quadrados\s*\)/],
+ hint:"[n * n for n in range(1, 6)]",
+ sol:`quadrados = [n * n for n in range(1, 6)]\nprint(quadrados)`},
+{t:"Tratando erros",b:`<p>Erros em tempo de execução (como converter "abc" para número) interrompem o programa. Com <code>try</code>/<code>except</code> você captura o erro e decide o que fazer. Tipos comuns: <code>ValueError</code>, <code>ZeroDivisionError</code>, <code>KeyError</code>, <code>FileNotFoundError</code>.</p>`,
+ ex:`try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print("Não dá para dividir por zero")`,
+ task:"Tente fazer n = int(\"abc\") dentro de try. Em except ValueError, mostre Número inválido.",start:"",out:"Número inválido",
+ ck:[/try\s*:/,/int\s*\(\s*(["'])abc\1\s*\)/,/except\s+ValueError\s*:/,/print\s*\(\s*(["'])Número inválido\1\s*\)/],
+ hint:"try: (indentado) n = int(\"abc\"); except ValueError: (indentado) print(...).",
+ sol:`try:\n    n = int("abc")\nexcept ValueError:\n    print("Número inválido")`},
+{t:"Módulos e bibliotecas",b:`<p>Python vem com muitas ferramentas prontas. Você as traz com <code>import</code>: <code>math</code> (raiz, pi), <code>random</code> (sorteios), <code>datetime</code> (datas), <code>json</code> (dados). Para bibliotecas de terceiros, instale com <code>pip install nome</code>.</p>`,
+ ex:`import random\nprint(random.randint(1, 6))\n\nfrom math import pi\nprint(pi)`,
+ task:"Importe math e mostre a raiz quadrada de 81 com math.sqrt.",start:"",out:"9.0",
+ ck:[/import\s+math/,/print\s*\(\s*math\.sqrt\s*\(\s*81\s*\)\s*\)/],
+ hint:"import math e depois print(math.sqrt(81)).",
+ sol:`import math\nprint(math.sqrt(81))`},
+{t:"Arquivos",b:`<p>Use <code>with open(nome, modo) as f:</code>. Modos: <code>"r"</code> ler, <code>"w"</code> escrever (apaga o que havia), <code>"a"</code> acrescentar. O <code>with</code> fecha o arquivo sozinho. Leia com <code>f.read()</code> ou percorra linha a linha com <code>for linha in f</code>.</p>`,
+ ex:`with open("a.txt", "w") as f:\n    f.write("oi")\n\nwith open("a.txt", "r") as f:\n    print(f.read())`,
+ task:"Escreva Olá no arquivo nota.txt (modo w) e depois leia e mostre o conteúdo.",start:"",out:"Olá",
+ ck:[/with\s+open\s*\(\s*(["'])nota\.txt\1\s*,\s*(["'])w\2\s*\)\s+as\s+\w+\s*:/,/\.write\s*\(/,/\.read\s*\(\s*\)/,/print\s*\(/],
+ hint:"Dois blocos with: um com \"w\" e f.write(\"Olá\"), outro com \"r\" e print(f.read()).",
+ sol:`with open("nota.txt", "w") as f:\n    f.write("Olá")\n\nwith open("nota.txt", "r") as f:\n    print(f.read())`},
+{t:"Classes e objetos",b:`<p>Uma classe é um molde para criar objetos que juntam dados (atributos) e ações (métodos). <code>__init__</code> roda ao criar o objeto, e <code>self</code> se refere ao próprio objeto. Isso é a base da programação orientada a objetos.</p>`,
+ ex:`class Cao:\n    def __init__(self, nome):\n        self.nome = nome\n\n    def latir(self):\n        print(self.nome + " diz au!")\n\nCao("Rex").latir()`,
+ task:"Crie a classe Pessoa com __init__(self, nome) e o método apresentar que mostra Eu sou seguido do nome. Use Pessoa(\"Ana\").apresentar().",start:"",out:"Eu sou Ana",
+ ck:[/class\s+Pessoa\s*:/,/def\s+__init__\s*\(\s*self\s*,\s*nome\s*\)\s*:/,/self\.nome\s*=\s*nome/,/def\s+apresentar\s*\(\s*self\s*\)\s*:/,/Pessoa\s*\(\s*(["'])Ana\1\s*\)\s*\.apresentar\s*\(\s*\)/],
+ hint:"Dentro da classe: __init__ guarda self.nome = nome; apresentar usa print(\"Eu sou \" + self.nome).",
+ sol:`class Pessoa:\n    def __init__(self, nome):\n        self.nome = nome\n\n    def apresentar(self):\n        print("Eu sou " + self.nome)\n\nPessoa("Ana").apresentar()`},
+{t:"Projeto: FizzBuzz",b:`<p>Um clássico de entrevistas que junta laço, condições e resto da divisão. De 1 a 15: múltiplos de 3 e 5 juntos mostram <code>FizzBuzz</code>, múltiplos de 3 mostram <code>Fizz</code>, de 5 mostram <code>Buzz</code>, e os demais mostram o número. Teste o múltiplo de 15 primeiro. Depois dele, siga para projetos próprios, como uma lista de tarefas ou um jogo de adivinhação, e explore <code>pip</code>, <code>requests</code> e <code>pandas</code>.</p>`,
+ ex:`print(15 % 3)  # 0, é múltiplo\nprint(7 % 3)   # 1, não é`,
+ task:"Para i de 1 a 15, mostre FizzBuzz, Fizz, Buzz ou o próprio número, conforme as regras.",start:"",out:"1\n2\nFizz\n4\nBuzz\n...\nFizzBuzz",
+ ck:[/for\s+\w+\s+in\s+range\s*\(\s*1\s*,\s*16\s*\)\s*:/,/%\s*15/,/%\s*3/,/%\s*5/,/elif/,/FizzBuzz/,/Fizz/,/Buzz/],
+ hint:"for com range(1, 16); if i % 15 == 0, elif i % 3 == 0, elif i % 5 == 0, else print(i).",
+ sol:`for i in range(1, 16):\n    if i % 15 == 0:\n        print("FizzBuzz")\n    elif i % 3 == 0:\n        print("Fizz")\n    elif i % 5 == 0:\n        print("Buzz")\n    else:\n        print(i)`},
+{t:"Comparações e lógica",b:`<p>Comparações (<code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code>) dão <code>True</code> ou <code>False</code>. Combine com <code>and</code>, <code>or</code> e <code>not</code>.</p>`,ex:`print(3 > 2 and 5 < 4)  # False`,task:"Com idade = 25, crie pode = idade >= 18 and idade < 65 e mostre pode.",start:"idade = 25\n",out:"True",ck:[/pode\s*=\s*idade\s*>=\s*18\s+and\s+idade\s*<\s*65/,/print\s*\(\s*pode\s*\)/],hint:"pode = idade >= 18 and idade < 65, depois print(pode).",sol:`idade = 25\npode = idade >= 18 and idade < 65\nprint(pode)`},
+{t:"Tipos de dados",b:`<p>Os tipos básicos são <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code> e <code>None</code>. A função <code>type()</code> mostra o tipo de um valor.</p>`,ex:`print(type(10))     # int\nprint(type("oi"))   # str`,task:"Mostre o tipo do valor 3.5 com type.",start:"",out:"<class 'float'>",ck:[/print\s*\(\s*type\s*\(\s*3\.5\s*\)\s*\)/],hint:"print(type(3.5))",sol:`print(type(3.5))`},
+{t:"Divisão inteira e resto",b:`<p><code>//</code> divide e descarta a parte decimal. <code>%</code> dá o resto. Servem para checar par/ímpar e converter unidades.</p>`,ex:`print(17 // 5)  # 3\nprint(17 % 5)   # 2`,task:"Mostre 17 // 5 e depois 17 % 5, cada um em um print.",start:"",out:"3\n2",ck:[/print\s*\(\s*17\s*\/\/\s*5\s*\)/,/print\s*\(\s*17\s*%\s*5\s*\)/],hint:"Dois prints: 17 // 5 e 17 % 5.",sol:`print(17 // 5)\nprint(17 % 5)`},
+{t:"Arredondando números",b:`<p><code>round(x, casas)</code> arredonda, <code>abs(x)</code> tira o sinal, <code>min()</code> e <code>max()</code> acham o menor e o maior, e <code>sum()</code> soma uma lista.</p>`,ex:`print(round(2.675, 2))\nprint(max([3, 9, 4]))`,task:"Arredonde 3.14159 para 2 casas e mostre.",start:"",out:"3.14",ck:[/print\s*\(\s*round\s*\(\s*3\.14159\s*,\s*2\s*\)\s*\)/],hint:"print(round(3.14159, 2))",sol:`print(round(3.14159, 2))`},
+{t:"Fatiando textos",b:`<p>Textos funcionam como listas: <code>t[0]</code> é a primeira letra, <code>t[0:3]</code> pega um trecho e <code>t[::-1]</code> inverte.</p>`,ex:`t = "Python"\nprint(t[0:3])   # Pyt\nprint(t[-1])    # n`,task:"Com palavra = 'Python', mostre a palavra invertida usando [::-1].",start:"palavra = \"Python\"\n",out:"nohtyP",ck:[/print\s*\(\s*palavra\s*\[\s*::\s*-1\s*\]\s*\)/],hint:"print(palavra[::-1])",sol:`palavra = "Python"\nprint(palavra[::-1])`},
+{t:"split e join",b:`<p><code>.split()</code> quebra um texto em lista de palavras. <code>"sep".join(lista)</code> junta de volta com um separador.</p>`,ex:`print("a b c".split())\nprint("-".join(["a", "b"]))`,task:"Quebre a frase com split, guarde em palavras e mostre tudo unido por hífen.",start:"frase = \"python é legal\"\n",out:"python-é-legal",ck:[/palavras\s*=\s*frase\.split\s*\(\s*\)/,/print\s*\(\s*(["'])-\1\s*\.join\s*\(\s*palavras\s*\)\s*\)/],hint:"palavras = frase.split() e print('-'.join(palavras)).",sol:`frase = "python é legal"\npalavras = frase.split()\nprint("-".join(palavras))`},
+{t:"while e break",b:`<p><code>while True:</code> repete para sempre, e <code>break</code> sai do laço quando você quiser.</p>`,ex:`while True:\n    texto = input("sair? ")\n    if texto == "s":\n        break`,task:"Dentro de while True, some 1 em n a cada volta. Quando n == 3, use break. Depois mostre n.",start:"n = 0\n",out:"3",ck:[/while\s+True\s*:/,/n\s*(\+=\s*1|=\s*n\s*\+\s*1)/,/break/,/print\s*\(\s*n\s*\)/],hint:"while True: n += 1; if n == 3: break. O print fica fora do laço.",sol:`n = 0\nwhile True:\n    n += 1\n    if n == 3:\n        break\nprint(n)`},
+{t:"enumerate",b:`<p><code>enumerate(lista)</code> entrega o índice junto com cada item no <code>for</code>.</p>`,ex:`for i, x in enumerate(["a", "b"]):\n    print(i, x)`,task:"Percorra frutas com enumerate, mostrando índice e fruta.",start:"frutas = [\"maçã\", \"uva\"]\n",out:"0 maçã\n1 uva",ck:[/for\s+\w+\s*,\s*\w+\s+in\s+enumerate\s*\(\s*frutas\s*\)\s*:/,/print\s*\(/],hint:"for i, fruta in enumerate(frutas): print(i, fruta)",sol:`frutas = ["maçã", "uva"]\nfor i, fruta in enumerate(frutas):\n    print(i, fruta)`},
+{t:"zip: duas listas juntas",b:`<p><code>zip(a, b)</code> percorre duas listas em paralelo, par a par.</p>`,ex:`for x, y in zip([1, 2], ["a", "b"]):\n    print(x, y)`,task:"Use zip com nomes e notas para mostrar cada nome e sua nota.",start:"nomes = [\"Ana\", \"Leo\"]\nnotas = [8, 6]\n",out:"Ana 8\nLeo 6",ck:[/for\s+\w+\s*,\s*\w+\s+in\s+zip\s*\(\s*nomes\s*,\s*notas\s*\)\s*:/,/print\s*\(/],hint:"for n, p in zip(nomes, notas): print(n, p)",sol:`nomes = ["Ana", "Leo"]\nnotas = [8, 6]\nfor n, p in zip(nomes, notas):\n    print(n, p)`},
+{t:"Dicionário: get e in",b:`<p><code>d.get(chave, padrao)</code> devolve um valor padrão se a chave não existir, sem dar erro. <code>chave in d</code> testa se ela existe.</p>`,ex:`d = {"a": 1}\nprint(d.get("z", 0))\nprint("a" in d)`,task:"Mostre d.get('b', 0).",start:"d = {\"a\": 1}\n",out:"0",ck:[/print\s*\(\s*d\.get\s*\(\s*(["'])b\1\s*,\s*0\s*\)\s*\)/],hint:"print(d.get('b', 0))",sol:`d = {"a": 1}\nprint(d.get("b", 0))`},
+{t:"Operações com conjuntos",b:`<p>Conjuntos têm união <code>a | b</code>, interseção <code>a &amp; b</code> e diferença <code>a - b</code>.</p>`,ex:`a = {1, 2}\nb = {2, 3}\nprint(a | b)  # {1, 2, 3}`,task:"Mostre os itens que estão em a e em b ao mesmo tempo.",start:"a = {1, 2, 3}\nb = {2, 3, 4}\n",out:"{2, 3}",ck:[/print\s*\(\s*(a\s*&\s*b|a\.intersection\s*\(\s*b\s*\))\s*\)/],hint:"print(a & b)",sol:`a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a & b)`},
+{t:"Argumentos *args",b:`<p><code>*args</code> deixa a função receber quantos valores você quiser, reunidos em uma tupla.</p>`,ex:`def mostrar(*itens):\n    print(len(itens))\n\nmostrar(1, 2, 3)`,task:"Crie soma(*numeros) que devolve sum(numeros). Mostre soma(1, 2, 3).",start:"",out:"6",ck:[/def\s+soma\s*\(\s*\*\w+\s*\)\s*:/,/return\s+sum\s*\(/,/print\s*\(\s*soma\s*\(\s*1\s*,\s*2\s*,\s*3\s*\)\s*\)/],hint:"def soma(*numeros): return sum(numeros)",sol:`def soma(*numeros):\n    return sum(numeros)\n\nprint(soma(1, 2, 3))`},
+{t:"Argumentos **kwargs",b:`<p><code>**kwargs</code> recebe argumentos nomeados em um dicionário.</p>`,ex:`def f(**dados):\n    print(dados)\n\nf(a=1, b=2)`,task:"Crie mostrar(**dados) que percorre dados.items() mostrando chave e valor. Chame mostrar(nome='Ana').",start:"",out:"nome Ana",ck:[/def\s+mostrar\s*\(\s*\*\*\w+\s*\)\s*:/,/\.items\s*\(\s*\)/,/mostrar\s*\(\s*nome\s*=\s*(["'])Ana\1\s*\)/],hint:"for k, v in dados.items(): print(k, v)",sol:`def mostrar(**dados):\n    for k, v in dados.items():\n        print(k, v)\n\nmostrar(nome="Ana")`},
+{t:"Recursão",b:`<p>Uma função recursiva chama a si mesma, sempre com um caso base para parar. O fatorial de n é n vezes o fatorial de n-1.</p>`,ex:`def contagem(n):\n    if n == 0:\n        return\n    print(n)\n    contagem(n - 1)`,task:"Crie fatorial(n) recursiva (fatorial de 0 ou 1 é 1) e mostre fatorial(5).",start:"",out:"120",ck:[/def\s+fatorial\s*\(\s*n\s*\)\s*:/,/fatorial\s*\(\s*n\s*-\s*1\s*\)/,/print\s*\(\s*fatorial\s*\(\s*5\s*\)\s*\)/],hint:"if n <= 1: return 1; senão return n * fatorial(n - 1).",sol:`def fatorial(n):\n    if n <= 1:\n        return 1\n    return n * fatorial(n - 1)\n\nprint(fatorial(5))`},
+{t:"map e filter",b:`<p><code>filter(func, lista)</code> mantém só os itens que passam no teste, e <code>map(func, lista)</code> transforma cada item. Envolva em <code>list()</code> para ver o resultado.</p>`,ex:`print(list(map(lambda n: n * 2, [1, 2])))`,task:"Com filter e lambda, guarde em pares só os pares de nums e mostre.",start:"nums = [1, 2, 3, 4]\n",out:"[2, 4]",ck:[/pares\s*=\s*list\s*\(\s*filter\s*\(\s*lambda\s+\w+\s*:/,/print\s*\(\s*pares\s*\)/],hint:"list(filter(lambda n: n % 2 == 0, nums))",sol:`nums = [1, 2, 3, 4]\npares = list(filter(lambda n: n % 2 == 0, nums))\nprint(pares)`},
+{t:"Ordenando com key",b:`<p><code>sorted(lista, key=funcao)</code> ordena por um critério. Use <code>reverse=True</code> para inverter.</p>`,ex:`print(sorted([3, 1, 2], reverse=True))`,task:"Ordene palavras pelo tamanho usando key=len e mostre.",start:"palavras = [\"ccc\", \"a\", \"bb\"]\n",out:"['a', 'bb', 'ccc']",ck:[/print\s*\(\s*sorted\s*\(\s*palavras\s*,\s*key\s*=\s*(len|lambda\s+\w+\s*:\s*len\s*\(\s*\w+\s*\))\s*\)\s*\)/],hint:"print(sorted(palavras, key=len))",sol:`palavras = ["ccc", "a", "bb"]\nprint(sorted(palavras, key=len))`},
+{t:"Geradores e yield",b:`<p>Um gerador devolve valores um de cada vez com <code>yield</code>, sem guardar tudo na memória. Ótimo para listas muito grandes.</p>`,ex:`def dois():\n    yield 1\n    yield 2\n\nprint(list(dois()))`,task:"Crie contar(n) que dá yield de i para i em range(n). Mostre list(contar(3)).",start:"",out:"[0, 1, 2]",ck:[/def\s+contar\s*\(\s*n\s*\)\s*:/,/yield\s+i/,/print\s*\(\s*list\s*\(\s*contar\s*\(\s*3\s*\)\s*\)\s*\)/],hint:"for i in range(n): yield i",sol:`def contar(n):\n    for i in range(n):\n        yield i\n\nprint(list(contar(3)))`},
+{t:"Herança",b:`<p>Uma classe pode herdar de outra: <code>class Cao(Animal):</code> ganha tudo de Animal e pode sobrescrever métodos.</p>`,ex:`class A:\n    def oi(self):\n        return "oi"\n\nclass B(A):\n    pass\n\nprint(B().oi())`,task:"Crie Animal com falar() devolvendo '...'. Crie Cao(Animal) cujo falar() devolve 'Au!'. Mostre Cao().falar().",start:"",out:"Au!",ck:[/class\s+Animal\s*:/,/class\s+Cao\s*\(\s*Animal\s*\)\s*:/,/return\s+(["'])Au!\1/,/print\s*\(\s*Cao\s*\(\s*\)\s*\.falar\s*\(\s*\)\s*\)/],hint:"Os dois falar(self) usam return. Cao herda de Animal entre parênteses.",sol:`class Animal:\n    def falar(self):\n        return "..."\n\nclass Cao(Animal):\n    def falar(self):\n        return "Au!"\n\nprint(Cao().falar())`},
+{t:"Datas com datetime",b:`<p>O módulo <code>datetime</code> cria e calcula datas. <code>date.today()</code> dá o dia de hoje e <code>.year</code>, <code>.month</code>, <code>.day</code> dão as partes.</p>`,ex:`from datetime import date\nprint(date.today())`,task:"Crie d = date(2026, 11, 8) e mostre d.year.",start:"from datetime import date\n",out:"2026",ck:[/from\s+datetime\s+import\s+date/,/d\s*=\s*date\s*\(\s*2026\s*,\s*11\s*,\s*8\s*\)/,/print\s*\(\s*d\.year\s*\)/],hint:"d = date(2026, 11, 8) e print(d.year).",sol:`from datetime import date\nd = date(2026, 11, 8)\nprint(d.year)`},
+{t:"Type hints",b:`<p>Dicas de tipo documentam o que a função espera e devolve: <code>def f(a: int) -&gt; int</code>. O Python não obriga, mas editores e ferramentas usam isso para achar erros.</p>`,ex:`def dobro(n: int) -> int:\n    return n * 2`,task:"Crie soma(a: int, b: int) -> int que devolve a + b. Mostre soma(2, 3).",start:"",out:"5",ck:[/def\s+soma\s*\(\s*a\s*:\s*int\s*,\s*b\s*:\s*int\s*\)\s*->\s*int\s*:/,/return\s+a\s*\+\s*b/,/print\s*\(\s*soma\s*\(\s*2\s*,\s*3\s*\)\s*\)/],hint:"def soma(a: int, b: int) -> int: com return a + b.",sol:`def soma(a: int, b: int) -> int:\n    return a + b\n\nprint(soma(2, 3))`},
+{t:"Seus próprios módulos",b:`<p>Qualquer arquivo <code>.py</code> é um módulo. Você o importa com <code>from arquivo import funcao</code>. O bloco <code>if __name__ == "__main__":</code> só roda quando o arquivo é executado diretamente, e não quando é importado. Use-o para testes e para o ponto de entrada do programa.</p>`,
+ ex:`# util.py\ndef soma(a, b):\n    return a + b\n\n# main.py\nfrom util import soma\nprint(soma(1, 2))`,
+ task:"Defina soma(a, b) que devolve a + b. Dentro de if __name__ == '__main__': mostre soma(2, 3).",start:"",out:"5",
+ ck:[/def\s+soma\s*\(\s*a\s*,\s*b\s*\)\s*:/,/return\s+a\s*\+\s*b/,/if\s+__name__\s*==\s*(["'])__main__\1\s*:/,/print\s*\(\s*soma\s*\(\s*2\s*,\s*3\s*\)\s*\)/],
+ hint:"A linha if __name__ == '__main__': termina com dois pontos, e o print fica indentado dentro dela.",
+ sol:`def soma(a, b):\n    return a + b\n\nif __name__ == "__main__":\n    print(soma(2, 3))`},
+{t:"Ambientes virtuais e pip",b:`<p>Cada projeto deve ter seu próprio ambiente virtual, uma pasta isolada com as bibliotecas dele. Assim versões diferentes não brigam entre si. Estes comandos rodam no <b>terminal</b>, não dentro do Python. Use <code>pip freeze > requirements.txt</code> para salvar as dependências e <code>pip install -r requirements.txt</code> para restaurá-las em outra máquina.</p>`,
+ ex:`python -m venv .venv\nsource .venv/bin/activate     # Linux/Mac\n.venv\\Scripts\\activate        # Windows\npip install requests`,
+ task:"Escreva, uma por linha, o comando que cria um ambiente chamado .venv e o comando que instala a biblioteca requests.",start:"",out:"(são comandos de terminal, não imprimem nada em Python)",
+ ck:[/python3?\s+-m\s+venv\s+\.venv/,/pip3?\s+install\s+requests/],
+ hint:"python -m venv .venv e depois pip install requests.",
+ sol:`python -m venv .venv\npip install requests`},
+{t:"JSON",b:`<p>JSON é o formato de texto que programas e APIs usam para trocar dados. Em Python ele vira dicionários e listas. <code>json.loads(texto)</code> converte texto em dados, e <code>json.dumps(dados)</code> faz o caminho contrário.</p>`,
+ ex:`import json\ndados = {"nome": "Ana", "tags": ["a", "b"]}\ntexto = json.dumps(dados)\nprint(json.loads(texto)["tags"])`,
+ task:"Converta o texto em um dicionário chamado dados usando json.loads e mostre o nome.",start:"import json\ntexto = '{\"nome\": \"Ana\", \"idade\": 20}'\n",out:"Ana",
+ ck:[/import\s+json/,/dados\s*=\s*json\.loads\s*\(\s*texto\s*\)/,/print\s*\(\s*dados\s*\[\s*(["'])nome\1\s*\]\s*\)/],
+ hint:"dados = json.loads(texto) e depois print(dados['nome']).",
+ sol:`import json\ntexto = '{"nome": "Ana", "idade": 20}'\ndados = json.loads(texto)\nprint(dados["nome"])`},
+{t:"Acessando APIs com requests",b:`<p>A biblioteca <code>requests</code> (instalada com pip) faz chamadas HTTP. <code>requests.get(url)</code> devolve uma resposta com <code>.status_code</code> (200 significa sucesso), <code>.text</code> e <code>.json()</code>. Para rodar de verdade, você precisa de internet e de um terminal na sua máquina.</p>`,
+ ex:`import requests\nr = requests.get("https://api.github.com")\nprint(r.status_code)\nprint(r.json().keys())`,
+ task:"Faça um GET em https://api.exemplo.com/dados guardando em resposta. Mostre o status_code e depois guarde o resultado de resposta.json() em dados.",start:"",out:"200 (se a API responder com sucesso)",
+ ck:[/import\s+requests/,/resposta\s*=\s*requests\.get\s*\(\s*(["'])https?:\/\/[^"']+\1\s*\)/,/print\s*\(\s*resposta\.status_code\s*\)/,/dados\s*=\s*resposta\.json\s*\(\s*\)/],
+ hint:"import requests, resposta = requests.get('https://...'), print(resposta.status_code), dados = resposta.json().",
+ sol:`import requests\n\nresposta = requests.get("https://api.exemplo.com/dados")\nprint(resposta.status_code)\ndados = resposta.json()`},
+{t:"Dados com pandas",b:`<p>O <code>pandas</code> trabalha com tabelas (DataFrames). Dá para filtrar linhas, somar, tirar médias e ler arquivos CSV com <code>pd.read_csv("arquivo.csv")</code>. É a ferramenta mais usada em análise de dados. Instale com <code>pip install pandas</code>.</p>`,
+ ex:`import pandas as pd\ndf = pd.DataFrame({"nome": ["Ana", "Leo"], "nota": [8, 6]})\nprint(df[df["nota"] > 7])`,
+ task:"Crie o DataFrame df com as colunas nome (Ana, Leo) e nota (8, 6). Mostre a média da coluna nota.",start:"import pandas as pd\n",out:"7.0",
+ ck:[/import\s+pandas\s+as\s+pd/,/df\s*=\s*pd\.DataFrame\s*\(/,/print\s*\(\s*df\s*\[\s*(["'])nota\1\s*\]\s*\.mean\s*\(\s*\)\s*\)/],
+ hint:"df = pd.DataFrame({'nome': [...], 'nota': [8, 6]}) e print(df['nota'].mean()).",
+ sol:`import pandas as pd\ndf = pd.DataFrame({"nome": ["Ana", "Leo"], "nota": [8, 6]})\nprint(df["nota"].mean())`},
+{t:"Testes com assert",b:`<p>Testes verificam se seu código continua certo depois de mudanças. <code>assert condição</code> não faz nada se for verdadeira e gera erro se for falsa. Em projetos maiores, a biblioteca <code>pytest</code> roda automaticamente todas as funções que começam com <code>test_</code>.</p>`,
+ ex:`def soma(a, b):\n    return a + b\n\nassert soma(2, 3) == 5\nprint("passou")`,
+ task:"Defina dobro(n) que devolve n * 2. Use assert para garantir que dobro(4) == 8 e mostre ok.",start:"",out:"ok",
+ ck:[/def\s+dobro\s*\(\s*\w+\s*\)\s*:/,/assert\s+dobro\s*\(\s*4\s*\)\s*==\s*8/,/print\s*\(\s*(["'])ok\1\s*\)/],
+ hint:"assert dobro(4) == 8 vem depois da função, e o print('ok') por último.",
+ sol:`def dobro(n):\n    return n * 2\n\nassert dobro(4) == 8\nprint("ok")`},
+{t:"Projeto final: tarefas",b:`<p>Hora de juntar listas, dicionários, funções e laços em um mini app de lista de tarefas. Cada tarefa é um dicionário, e as tarefas ficam numa lista. <b>Próximos passos:</b> salvar as tarefas em JSON, criar uma interface web com Flask ou FastAPI, explorar ciência de dados (pandas, matplotlib), automação de tarefas ou o framework Django. O melhor jeito de aprender agora é construir algo seu.</p>`,
+ ex:`tarefa = {"texto": "Estudar", "feita": False}\nprint(tarefa["texto"])`,
+ task:"Crie a lista tarefas vazia e a função adicionar(texto), que acrescenta um dicionário com texto e feita igual a False. Adicione Estudar Python e mostre o texto de cada tarefa com for.",start:"",out:"Estudar Python",
+ ck:[/tarefas\s*=\s*\[\s*\]/,/def\s+adicionar\s*\(\s*texto\s*\)\s*:/,/tarefas\.append\s*\(/,/(["'])feita\1\s*:\s*False/,/adicionar\s*\(\s*(["'])[^"']+\1\s*\)/,/for\s+\w+\s+in\s+tarefas\s*:/],
+ hint:"def adicionar(texto): tarefas.append({'texto': texto, 'feita': False}); depois adicionar('Estudar Python') e for t in tarefas: print(t['texto']).",
+ sol:`tarefas = []\n\ndef adicionar(texto):\n    tarefas.append({"texto": texto, "feita": False})\n\nadicionar("Estudar Python")\nfor t in tarefas:\n    print(t["texto"])`},
+{t:"Gráficos com matplotlib",b:`<p>O <code>matplotlib</code> desenha gráficos a partir de listas. Instale com <code>pip install matplotlib</code>. Você chama <code>plt.plot(x, y)</code> para linhas, acrescenta título e rótulos, e termina com <code>plt.show()</code> para abrir a janela do gráfico (ou <code>plt.savefig("arquivo.png")</code> para salvar a imagem).</p>`,
+ ex:`import matplotlib.pyplot as plt\n\nplt.plot([1, 2, 3], [1, 4, 9])\nplt.xlabel("x")\nplt.ylabel("x ao quadrado")\nplt.show()`,
+ task:"Com x = [1, 2, 3] e y = [2, 4, 6], desenhe a linha com plt.plot(x, y), coloque o título Dobro com plt.title e abra o gráfico com plt.show().",start:"import matplotlib.pyplot as plt\nx = [1, 2, 3]\ny = [2, 4, 6]\n",out:"(abre uma janela com uma linha crescente chamada Dobro)",
+ ck:[/import\s+matplotlib\.pyplot\s+as\s+plt/,/plt\.plot\s*\(\s*x\s*,\s*y\s*\)/,/plt\.title\s*\(\s*(["'])Dobro\1\s*\)/,/plt\.show\s*\(\s*\)/],
+ hint:"A ordem é plot, title e por último show.",
+ sol:`import matplotlib.pyplot as plt\nx = [1, 2, 3]\ny = [2, 4, 6]\n\nplt.plot(x, y)\nplt.title("Dobro")\nplt.show()`},
+{t:"Gráficos de barras e imagens",b:`<p>Use <code>plt.bar(categorias, valores)</code> para comparar categorias e <code>plt.hist(dados)</code> para ver a distribuição dos valores. Com pandas, <code>df.plot(kind="bar")</code> faz o mesmo direto da tabela. Salvar em arquivo com <code>plt.savefig</code> é útil em scripts e relatórios.</p>`,
+ ex:`import matplotlib.pyplot as plt\nplt.bar(["A", "B"], [3, 5])\nplt.savefig("grafico.png")`,
+ task:"Com nomes e notas, desenhe barras com plt.bar, coloque o rótulo Nota no eixo y com plt.ylabel e salve a imagem como notas.png com plt.savefig.",start:"import matplotlib.pyplot as plt\nnomes = [\"Ana\", \"Leo\"]\nnotas = [8, 6]\n",out:"(cria o arquivo notas.png com duas barras)",
+ ck:[/plt\.bar\s*\(\s*nomes\s*,\s*notas\s*\)/,/plt\.ylabel\s*\(\s*(["'])Nota\1\s*\)/,/plt\.savefig\s*\(\s*(["'])notas\.png\1\s*\)/],
+ hint:"plt.bar(nomes, notas), plt.ylabel('Nota') e plt.savefig('notas.png').",
+ sol:`import matplotlib.pyplot as plt\nnomes = ["Ana", "Leo"]\nnotas = [8, 6]\n\nplt.bar(nomes, notas)\nplt.ylabel("Nota")\nplt.savefig("notas.png")`},
+{t:"Seu primeiro site com Flask",b:`<p>O <code>Flask</code> transforma funções Python em páginas web. Instale com <code>pip install flask</code>. Cada função ganha um endereço (rota) com <code>@app.route</code>, e o que ela devolve com <code>return</code> aparece no navegador. Rode com <code>flask --app arquivo run</code> e abra <code>http://127.0.0.1:5000</code>.</p>`,
+ ex:`from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/")\ndef home():\n    return "Olá, mundo!"`,
+ task:"Crie o app Flask e uma rota /ola cuja função devolve o texto Olá, web!",start:"",out:"(no navegador, em /ola: Olá, web!)",
+ ck:[/from\s+flask\s+import\s+Flask/,/app\s*=\s*Flask\s*\(\s*__name__\s*\)/,/@app\.route\s*\(\s*(["'])\/ola\1\s*\)/,/def\s+\w+\s*\(\s*\)\s*:/,/return\s+(["'])Olá, web!\1/],
+ hint:"A linha @app.route('/ola') vem logo acima do def, e o return fica indentado.",
+ sol:`from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/ola")\ndef ola():\n    return "Olá, web!"`},
+{t:"Flask: parâmetros e JSON",b:`<p>Rotas aceitam valores no endereço, como <code>/soma/&lt;int:a&gt;/&lt;int:b&gt;</code>, e a função recebe esses valores como parâmetros. Se a função devolver um dicionário, o Flask o converte em JSON. Assim você cria a API que a lição do <code>requests</code> consumia.</p>`,
+ ex:`@app.route("/usuario/<nome>")\ndef usuario(nome):\n    return {"nome": nome}`,
+ task:"Crie a rota /soma/<int:a>/<int:b> cuja função recebe a e b e devolve o dicionário com resultado igual a a + b.",start:"from flask import Flask\napp = Flask(__name__)\n\n",out:"(em /soma/2/3 devolve {\"resultado\": 5})",
+ ck:[/@app\.route\s*\(\s*(["'])\/soma\/<int:a>\/<int:b>\1\s*\)/,/def\s+\w+\s*\(\s*a\s*,\s*b\s*\)\s*:/,/return\s+\{\s*(["'])resultado\1\s*:\s*a\s*\+\s*b\s*\}/],
+ hint:"return {'resultado': a + b} dentro da função com parâmetros a e b.",
+ sol:`from flask import Flask\napp = Flask(__name__)\n\n@app.route("/soma/<int:a>/<int:b>")\ndef soma(a, b):\n    return {"resultado": a + b}`},
+{t:"APIs modernas com FastAPI",b:`<p>O <code>FastAPI</code> é a escolha atual para APIs: rápido, valida os tipos automaticamente e gera uma página de documentação em <code>/docs</code>. Instale com <code>pip install fastapi uvicorn</code> e rode com <code>uvicorn arquivo:app --reload</code>. Os tipos nos parâmetros (<code>n: int</code>) são usados de verdade: se alguém enviar texto, a API responde com erro claro.</p>`,
+ ex:`from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/")\ndef home():\n    return {"mensagem": "oi"}`,
+ task:"Crie o app FastAPI e a rota GET /dobro/{n}, com n: int, que devolve o dicionário com dobro igual a n * 2.",start:"",out:"(em /dobro/4 devolve {\"dobro\": 8})",
+ ck:[/from\s+fastapi\s+import\s+FastAPI/,/app\s*=\s*FastAPI\s*\(\s*\)/,/@app\.get\s*\(\s*(["'])\/dobro\/\{n\}\1\s*\)/,/def\s+\w+\s*\(\s*n\s*:\s*int\s*\)\s*:/,/return\s+\{\s*(["'])dobro\1\s*:\s*n\s*\*\s*2\s*\}/],
+ hint:"@app.get('/dobro/{n}') e def dobro(n: int): com return {'dobro': n * 2}.",
+ sol:`from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/dobro/{n}")\ndef dobro(n: int):\n    return {"dobro": n * 2}`}
+];
+const KEY="py-do-zero-v1";
+let done=[],cur=0,last=0,drafts={},user="",st={n:0,last:"",best:0};
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+const jp=(s,d)=>{try{return JSON.parse(s)??d}catch(e){return d}};
+function load(){const d=jp(ls(KEY+":"+user),{});done=Array.isArray(d.done)?d.done:[];last=d.last||0;drafts=d.drafts||{};st=d.st||{n:0,last:"",best:0}}
+const save=()=>{ls(KEY+":"+user,JSON.stringify({done,last,drafts,st}));if(fdb&&uid){clearTimeout(saveT);saveT=setTimeout(()=>fdb.collection("users").doc(uid).set({name:user,done,last,drafts:JSON.stringify(drafts),st},{merge:true}).catch(()=>{}),2500)}};
+user=ls(KEY+":user")||"";load();
+const $=id=>document.getElementById(id);
+function nav(){
+ $("nav").innerHTML="";
+ const h=document.createElement("button");h.textContent="🏠 Início";if(cur===-1)h.setAttribute("aria-current","true");h.onclick=home;$("nav").appendChild(h);
+ const q=document.createElement("button");q.textContent="❓ Dúvidas";if(cur===-2)q.setAttribute("aria-current","true");q.onclick=faq;$("nav").appendChild(q);
+ L.forEach((l,i)=>{const b=document.createElement("button");b.textContent=(i+1)+". "+l.t;
+  if(done.includes(i))b.className="done";
+  if(i===cur)b.setAttribute("aria-current","true");
+  b.onclick=()=>{cur=i;show()};$("nav").appendChild(b)});
+ $("fill").style.width=(done.length/L.length*100)+"%";
+ $("count").textContent=done.length+" de "+L.length+" lições concluídas"+" · 🔥 "+streak()+(streak()===1?" dia":" dias")+" seguidos";
+ if(user){const u=document.createElement("button");u.textContent="👤 "+user+" · Sair";u.style.cssText="margin-left:10px;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 14px sans-serif;cursor:pointer";u.onclick=logout;$("count").appendChild(u)}
+ if(done.length===L.length){const b=document.createElement("button");b.textContent="🎓 Emitir certificado";b.style.cssText="margin-left:10px;padding:4px 10px;border-radius:6px;border:1px solid var(--blue);background:var(--blue);color:var(--blue-ink);font:600 14px sans-serif;cursor:pointer";b.onclick=cert;$("count").appendChild(b)}
+}
+function show(){
+ const l=L[cur],m=$("main");last=cur;save();try{speechSynthesis.cancel()}catch(e){}talking=false;
+ m.innerHTML=`<h2></h2>${l.b}<h3>Exemplo</h3><pre id="ex"></pre><h3>Sua vez</h3><div class="task" id="task"></div><textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Seu código"></textarea>
+ <div class="row"><button class="go" id="run">▶ Executar</button><button id="chk">Conferir</button><button id="lis">🔊 Ouvir</button><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent('python '+l.t)}">▶ Vídeos</a><button id="hnt">Dica</button><button id="sol">Ver solução</button></div>
+ <div class="msg" id="msg" role="status"></div><div class="out" id="out"></div>
+ <div class="pager"><button class="row" style="all:unset;cursor:pointer;color:var(--blue);font-weight:600" id="prev">Anterior</button><button style="all:unset;cursor:pointer;color:var(--blue);font-weight:600" id="next">Próxima</button></div>`;
+ m.querySelector("h2").textContent=(cur+1)+". "+l.t;
+ $("ex").textContent=l.ex;$("task").textContent=l.task;$("code").value=drafts[cur]!=null?drafts[cur]:l.start;
+ $("code").addEventListener("input",()=>{drafts[cur]=$("code").value;save()});
+ $("prev").style.visibility=cur?"visible":"hidden";
+ $("next").style.visibility=cur<L.length-1?"visible":"hidden";
+ $("prev").onclick=()=>{cur--;show()};$("next").onclick=()=>{cur++;show()};
+ $("code").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText("    ",s,t.selectionEnd,"end")}});
+ $("hnt").onclick=()=>msg("Dica: "+l.hint,"");
+ $("run").onclick=()=>runPy(l);
+ $("lis").onclick=()=>{const t=document.createElement("div");t.innerHTML=l.b;speak(l.t+". "+t.textContent+" Sua vez: "+l.task)};
+ $("sol").onclick=()=>{$("code").value=l.sol;msg("Solução carregada. Leia com calma e depois confira.","")};
+ $("chk").onclick=()=>{
+  const c=$("code").value;
+  if(!c.trim())return msg("Escreva seu código na caixa acima.","bad");
+  const fail=l.ck.find(r=>!r.test(c));
+  if(fail){hideOut();return msg("Ainda não. "+l.hint,"bad")}
+  msg("Correto! Você concluiu esta lição.","ok");
+  const o=$("out");o.style.display="block";o.innerHTML="";const b=document.createElement("b");b.textContent="Saída esperada\n"+l.out;o.appendChild(b);
+  tick();if(!done.includes(cur))done.push(cur);save();nav()
+ };
+ nav();
+ window.scrollTo(0,0);
+}
+function msg(t,c){const e=$("msg");e.textContent=t;e.className="msg "+c}
+function hideOut(){$("out").style.display="none"}
+function enter(n){n=n.trim();if(!n)return;user=n;ls(KEY+":user",n);const us=jp(ls(KEY+":users"),[]);if(!us.includes(n)){us.push(n);ls(KEY+":users",JSON.stringify(us))}load();home()}
+function logout(){user="";ls(KEY+":user","");if(fauth){fauth.signOut();return}login()}
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dayDiff=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+function tick(){const t=today();if(st.last===t)return;st.n=(st.last&&dayDiff(st.last,t)===1)?st.n+1:1;st.last=t;st.best=Math.max(st.best||0,st.n)}
+function streak(){return st.last&&dayDiff(st.last,today())<=1?st.n:0}
+const FB={apiKey:"",authDomain:"",projectId:"",appId:""};
+let fdb=null,fauth=null,uid="",saveT=0,talking=false;
+function initCloud(){
+ if(!FB.apiKey||!window.firebase)return false;
+ firebase.initializeApp(FB);fauth=firebase.auth();fdb=firebase.firestore();
+ fauth.onAuthStateChanged(async u=>{
+  if(!u){user="";uid="";return login()}
+  uid=u.uid;user=u.displayName||u.email;
+  try{const s=await fdb.collection("users").doc(uid).get(),d=s.exists?s.data():{};
+   done=Array.isArray(d.done)?d.done:[];last=d.last||0;drafts=jp(d.drafts,{});st=d.st||{n:0,last:"",best:0};
+   fdb.collection("visits").add({uid,name:user,email:u.email||"",at:firebase.firestore.FieldValue.serverTimestamp()}).catch(()=>{});
+  }catch(e){load()}
+  home()});
+ return true;
+}
+function speak(txt){
+ const s=window.speechSynthesis,b=()=>$("lis");
+ if(!s)return msg("Seu navegador não suporta leitura em voz.","bad");
+ if(talking){s.cancel();talking=false;if(b())b().textContent="🔊 Ouvir";return}
+ s.cancel();
+ const parts=(txt.match(/[^.!?:;]+[.!?:;]?/g)||[txt]).map(x=>x.trim()).filter(Boolean);
+ const vs=s.getVoices(),v=vs.find(x=>/pt[-_]BR/i.test(x.lang))||vs.find(x=>/^pt/i.test(x.lang));
+ let i=0;talking=true;b().textContent="⏹ Parar";
+ const end=()=>{talking=false;if(b())b().textContent="🔊 Ouvir"};
+ const next=()=>{if(!talking||i>=parts.length)return end();const u=new SpeechSynthesisUtterance(parts[i++]);u.lang="pt-BR";if(v)u.voice=v;u.onend=next;u.onerror=ev=>{if(ev.error==="canceled"||ev.error==="interrupted")return;end();msg("Não consegui falar. Seu aparelho pode estar sem voz em português (veja as configurações de voz do Android).","bad")};s.speak(u)};
+ setTimeout(next,120);
+}
+const accs=()=>jp(ls(KEY+":acc"),{});
+async function hash(p,s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s+":"+p));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("")}
+function login(mode){
+ if(fdb){cur=-1;$("nav").innerHTML="";$("count").textContent="";$("fill").style.width="0";
+  $("main").innerHTML=`<h2>Entrar</h2><p>Entre com sua conta Google para salvar seu progresso e continuar de onde parou em qualquer aparelho.</p><div class="row"><button class="go" id="gg">Entrar com Google</button></div><div class="msg" id="lm" role="alert"></div><p style="color:var(--mute);font-size:14px">Ao entrar, seu nome e e-mail ficam registrados no cadastro do curso.</p>`;
+  $("gg").onclick=async()=>{const p=new firebase.auth.GoogleAuthProvider();try{await fauth.signInWithPopup(p)}catch(e){if(e.code==="auth/popup-blocked"||e.code==="auth/operation-not-supported-in-this-environment")return fauth.signInWithRedirect(p);$("lm").textContent="Não foi possível entrar. Tente de novo ("+(e.code||"erro")+").";$("lm").className="msg bad"}};
+  return}
+ const nw=mode==="new";cur=-1;$("nav").innerHTML="";$("count").textContent="";$("fill").style.width="0";
+ $("main").innerHTML=`<h2>${nw?"Criar conta":"Entrar"}</h2><p>${nw?"Escolha um nome de usuário e uma senha para salvar seu progresso.":"Entre com seu usuário e sua senha para continuar de onde parou."}</p><label>Usuário<input id="nm" maxlength="30" autocomplete="username"></label><label>Senha<input id="pw" type="password" autocomplete="${nw?"new-password":"current-password"}"></label>${nw?`<label>Repita a senha<input id="pw2" type="password" autocomplete="new-password"></label>`:""}<div class="msg" id="lm" role="alert"></div><div class="row"><button class="go" id="ent">${nw?"Criar conta":"Entrar"}</button><button id="sw">${nw?"Já tenho conta":"Criar uma conta"}</button></div>`;
+ const err=t=>{$("lm").textContent=t;$("lm").className="msg bad"};
+ $("sw").onclick=()=>login(nw?"in":"new");
+ const send=async()=>{
+  if(!(window.crypto&&crypto.subtle))return err("Este navegador não permite senha aqui. Abra o site pelo endereço https.");
+  const n=$("nm").value.trim(),p=$("pw").value,k=n.toLowerCase(),A=accs();
+  if(!n)return err("Digite o nome de usuário.");
+  if(!p)return err("Digite a senha.");
+  if(nw){
+   if(A[k])return err("Este nome de usuário já está sendo usado. Escolha outro.");
+   if(p.length<4)return err("A senha precisa ter pelo menos 4 caracteres.");
+   if(p!==$("pw2").value)return err("As senhas não são iguais.");
+   const s=Array.from(crypto.getRandomValues(new Uint8Array(8))).map(x=>x.toString(16)).join("");
+   A[k]={name:n,salt:s,hash:await hash(p,s)};ls(KEY+":acc",JSON.stringify(A));enter(n);
+  }else{
+   const a=A[k];
+   if(!a)return err("Usuário não encontrado. Toque em Criar uma conta.");
+   if(await hash(p,a.salt)!==a.hash)return err("Senha incorreta.");
+   enter(a.name);
+  }
+ };
+ $("ent").onclick=send;
+ ["nm","pw","pw2"].forEach(id=>{const e=$(id);if(e)e.addEventListener("keydown",ev=>{if(ev.key==="Enter")send()})});
+}
+function faq(){
+ cur=-2;nav();
+ const Q=[["Preciso saber programar antes?","Não. O curso começa do zero, com o primeiro programa, e vai aumentando a dificuldade aos poucos."],["Quanto tempo leva?","Cada lição leva de 5 a 15 minutos. Fazendo uma ou duas por dia, você chega ao fim em poucas semanas."],["O que é Python e para que serve?","É uma linguagem de programação simples e muito popular. É usada em sites, automação de tarefas, análise de dados, inteligência artificial e jogos."],["Preciso instalar alguma coisa?","Para as lições básicas, não: só de um navegador. Para Flask, FastAPI, pandas, requests e matplotlib, instale o Python no seu computador, em python.org."],["Por que o botão Executar não funciona?","Ele baixa o Python da internet (Pyodide) para rodar dentro do navegador. A página aberta dentro do Claude bloqueia esse download por segurança, então lá ele não funciona. No site hospedado por você (GitHub Pages), com internet, funciona. Nas lições que dependem de instalação, use o botão Conferir."],["Como o Conferir funciona?","Ele verifica se o seu código tem a estrutura pedida, como def, return e print. Pode existir um jeito válido que ele não reconheça. Compare com a solução ou use o Executar."],["Meu código parece certo, mas o Conferir diz que não.","Revise os nomes das variáveis, as aspas e a indentação (4 espaços). Leia a Dica da lição e use o Executar para ver se a saída bate com a esperada."],["Como meu progresso é salvo?","Ao criar uma conta, o progresso fica salvo neste aparelho. Para levar a outro, use Copiar backup e Restaurar backup na tela de Início. Se você limpar os dados do navegador, o progresso some."],["Esqueci minha senha.","Não dá para recuperar, porque a senha fica só neste aparelho. Restaure um backup ou crie uma conta nova com outro nome."],["Como funciona a sequência diária?","Ela conta os dias seguidos em que você conclui pelo menos uma lição. Se passar um dia inteiro sem concluir nenhuma, a contagem volta a 1 na próxima lição concluída. O recorde fica guardado."],["Como emito o certificado?","Conclua todas as lições. Um botão aparece no topo da página. Se a janela não abrir, permita pop-ups no navegador."],["O que é indentação e por que dá erro?","Em Python, os espaços no começo da linha (4 espaços) mostram o que pertence a um bloco, como o corpo de um if ou de uma função. O erro IndentationError aparece quando eles estão errados."],["Onde continuo estudando depois?","Construa projetos seus, leia a documentação oficial em docs.python.org/pt-br e escolha uma área: dados, web ou automação."]];
+ $("main").innerHTML="<h2>Dúvidas frequentes</h2><p>Não achou sua resposta? Revise a lição ou use o botão Dica.</p><div id=\"fq\"></div>";
+ Q.forEach(x=>{const d=document.createElement("details"),s=document.createElement("summary"),p=document.createElement("p");s.textContent=x[0];p.textContent=x[1];d.append(s,p);$("fq").appendChild(d)});
+ window.scrollTo(0,0);
+}
+function home(){
+ cur=-1;nav();
+ const M=[["Fundamentos","1–6","Primeiro programa, variáveis, contas, if, listas com for e funções.",0],["Dados e controle","7–19","Textos, entrada de dados, laços, dicionários, conjuntos, erros, arquivos, classes e FizzBuzz.",6],["Python mais fundo","20–39","Lógica, tipos, recursão, geradores, herança, datas, *args, map/filter e type hints.",19],["Nível profissional","40–46","Módulos próprios, ambientes virtuais, JSON, APIs, pandas, testes e um projeto.",39],["Gráficos e web","47–51","Gráficos com matplotlib e sites e APIs com Flask e FastAPI.",46]];
+ $("main").innerHTML=`<h2>Aprenda Python do zero, grátis</h2><p>Um curso prático com ${L.length} lições curtas. Você lê a explicação, escreve o código e confere na hora. Não precisa saber nada de programação.</p><h3>O que você vai aprender</h3><div class="cards" id="cards"></div><h3>Como funciona</h3><ul><li>Cada lição tem explicação, exemplo, exercício, dica e solução.</li><li>Use <b>Executar</b> para rodar o código e <b>Conferir</b> para validar.</li><li>Toque em <b>Ouvir</b> para escutar a explicação.</li><li>Seu progresso fica salvo neste aparelho, e no fim você emite um certificado.</li></ul><h3>O que você precisa</h3><p>Só de um navegador. Para as lições de Flask, FastAPI, pandas e requests, instale o Python no computador depois.</p><div class="row"><button class="go" id="start"></button></div><h3>Seu progresso</h3><p>🔥 Sequência atual: ${streak()} ${streak()===1?"dia":"dias"} · Recorde: ${st.best||0}. Conclua uma lição por dia para mantê-la.</p><p>Fica salvo neste aparelho. Para levar a outro, copie o código de backup e restaure lá.</p><div class="row"><button id="bk">Copiar backup</button><button id="rs">Restaurar backup</button></div>`;
+ M.forEach(x=>{const b=document.createElement("button");b.className="card";const t=document.createElement("b");t.textContent=x[0]+" · lições "+x[1];const p=document.createElement("span");p.textContent=x[2];b.append(t,p);b.onclick=()=>{cur=x[3];show()};$("cards").appendChild(b)});
+ const nx=L.findIndex((_,i)=>!done.includes(i));
+ const s=$("start"),go=Math.min(last,L.length-1);s.textContent=(done.length||last)?"Continuar de onde parei (lição "+(go+1)+")":"Começar agora";s.onclick=()=>{cur=(done.length||last)?go:0;show()};
+ $("bk").onclick=async()=>{const c=btoa(unescape(encodeURIComponent(JSON.stringify({done,last,drafts,st}))));try{await navigator.clipboard.writeText(c);alert("Código copiado. Guarde em um lugar seguro.")}catch(e){prompt("Copie este código:",c)}};
+ $("rs").onclick=()=>{const c=prompt("Cole o código de backup:");if(!c)return;try{const d=JSON.parse(decodeURIComponent(escape(atob(c.trim()))));done=Array.isArray(d.done)?d.done:[];last=d.last||0;drafts=d.drafts||{};st=d.st||{n:0,last:"",best:0};save();home();alert("Progresso restaurado.")}catch(e){alert("Código inválido.")}};
+ window.scrollTo(0,0);
+}
+let py=null;
+async function loadPy(){if(py)return py;await new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});py=await loadPyodide();return py}
+async function runPy(l){
+ const c=$("code").value,o=$("out");
+ if(!c.trim())return msg("Escreva seu código primeiro.","bad");
+ if(/^\s*(python3?\s+-m|pip3?\s)|^\s*(from|import)\s+(flask|fastapi|requests|pandas|matplotlib)|open\s*\(/m.test(c))return msg("Este exemplo precisa de instalação ou de arquivos no seu computador. Use Conferir.","");
+ msg("Carregando o Python… (só na primeira vez)","");
+ let p;try{p=await loadPy()}catch(e){return msg("Aqui dentro do Claude a página bloqueia o download do Python. No site hospedado por você (GitHub Pages), com internet, o Executar funciona. Use Conferir por enquanto.","bad")}
+ let txt="";p.setStdout({batched:s=>txt+=s+"\n"});p.setStderr({batched:s=>txt+=s+"\n"});p.setStdin({stdin:()=>prompt("O programa pede um valor:")||""});
+ try{await p.runPythonAsync(c);msg("Executado.","ok")}catch(e){txt+=String(e.message).split("\n").slice(-3).join("\n");msg("Deu erro. Leia a mensagem abaixo.","bad")}
+ o.style.display="block";o.style.color="var(--term-ink)";o.textContent=txt||"(sem saída)";
+ if(!/^\(/.test(l.out)&&txt.trim()===l.out.trim()){if(!done.includes(cur))done.push(cur);tick();save();nav();msg("Saída correta! Lição concluída.","ok")}
+}
+function cert(){const n=prompt("Seu nome para o certificado:");if(!n)return;const w=window.open("","_blank");if(!w)return alert("Permita pop-ups para ver o certificado.");const d=new Date().toLocaleDateString("pt-BR");w.document.write(`<title>Certificado</title><body style="font-family:Georgia,serif;text-align:center;padding:60px;border:12px double #2f6db5;margin:20px"><h1 style="font-size:42px">Certificado de Conclusão</h1><p style="font-size:22px">Certificamos que</p><h2 style="font-size:38px;margin:10px"></h2><p style="font-size:22px">concluiu todas as ${L.length} lições do curso <b>Python do zero</b>.</p><p>${d}</p><p><button onclick="print()">Imprimir ou salvar em PDF</button></p></body>`);w.document.close();w.document.querySelector("h2").textContent=n}
+$("main").textContent="Carregando…";initCloud()||(user?home():login());
+</script>
+</body>
+</html>
